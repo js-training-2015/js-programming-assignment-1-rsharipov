@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JavaScript tasks</title>
+ 
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.19.0.css">
+  <script src="http://code.jquery.com/qunit/qunit-1.19.0.js"></script>
+  <script src="tasks.js"></script>
+ 
+  <script>
+  function getRandomIntInclusive(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  QUnit.test("solution 1", function( assert ) {
+    assert.ok(Math.abs(solution1(1.5, 4, 2) - 1.25) < 0.001, "solution1(1.5, 4, 2) should be close to 1.25");
+    assert.ok(Math.abs(solution1(1, 2, 2) - 0.5) < 0.001, "solution1(1, 2, 2) should be close to 0.5");
+    assert.throws(function() { solution1(1, 2, 0) }, /C must be positive/, "solution1 should throw an error for non-positive C parameter");
+    assert.throws(function() { solution1(2, 1, 1) }, /A cannot be greater than B/, "solution1 should throw an error when A is greater than B");
+    assert.throws(function() { solution1("1", 2, 1) }, /A must be a number/, "solution1 should throw an error for non-numeric A parameter");
+    assert.throws(function() { solution1(1, "2", 1) }, /B must be a number/, "solution1 should throw an error for non-numeric B parameter");
+    assert.throws(function() { solution1(1, 2, "1") }, /C must be a number/, "solution1 should throw an error for non-numeric C parameter");
+  });
+  
+  QUnit.test("solution 2", function ( assert ) {
+    assert.throws(function() { solution2("1", 2) }, /A must be an integer/, "solution2 should throw an error for a non-number A");
+    assert.throws(function() { solution2(1, "2") }, /B must be an integer/, "solution2 should throw an error for a non-number B");
+    assert.throws(function() { solution2(2, 2) }, /A must be less than B/, "solution2 should throw an error for when A is greater than or equal to B");
+    /*
+     * 0101 (5)
+     * 1010 (10)
+     * ----
+     * 1111
+     */
+    assert.equal(solution2(1, 10), 15, "solution2(1, 10) should be 15");
+    /*
+     * 000 (0)
+     * 111 (3)
+     * ---
+     * 111 (3)
+     */
+    assert.equal(solution2(-2, 3), 3, "solution2(-2, 3) should be 3");
+    /*
+     * 11111111 11111111 11111111 11110110 (-10)
+     * 11111111 11111111 11111111 11111001 (-7)
+     * -----------------------------------
+     * 00000000 00000000 00000000 00001111  (15)
+     */
+    assert.equal(solution2(-10, -1), 15, "solution2(-10, -1) should be 15");
+    assert.equal(solution2(-302, 402), 511, "solution2(-302, 402) should be 511");
+    assert.equal(solution2(-518, 129), 1023, "solution2(-518, 129) should be 1023");
+    
+    function testAgainstSlow(A, B) {
+      assert.equal(solution2(A, B), slowSolution2(A, B), "solution2(" + A + ", " + B + ") should be " + slowSolution2(A, B));
+    }
+    
+    testAgainstSlow(-1, 100);
+    testAgainstSlow(0, 100);
+    testAgainstSlow(-100, -1);
+    testAgainstSlow(-100, 0);
+    testAgainstSlow(-100, 100);
+    
+    for (var i = 0; i < 1000; ++i) {
+      var A = getRandomIntInclusive(-1000, 1000);
+      var B = getRandomIntInclusive(A + 1, 1000);
+      testAgainstSlow(A, B);
+    }
+  });
+  
+  </script>
+</head>
+<body>
+ 
+<div id="qunit"></div>
+ 
+</body>
+</html>
